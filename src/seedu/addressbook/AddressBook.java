@@ -14,14 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /*
  * NOTE : =============================================================
@@ -184,6 +177,11 @@ public class AddressBook {
     private static final ArrayList<String[]> ALL_PERSONS = new ArrayList<>();
 
     /**
+     * List of all persons in the address book.
+     */
+    private static HashMap<PersonProperty,String> john;
+
+    /**
      * Stores the most recent list of persons shown to the user as a result of a user command.
      * This is a subset of the full list. Deleting persons in the pull list does not delete
      * those persons from this list.
@@ -194,6 +192,11 @@ public class AddressBook {
      * The path to the file used for storing person data.
      */
     private static String storageFilePath;
+
+    /**
+     * Adding a enum feature
+     */
+    private enum PersonProperty  {NAME, EMAIL, PHONE};
 
     /*
      * NOTE : =============================================================
@@ -210,6 +213,7 @@ public class AddressBook {
         showWelcomeMessage();
         processProgramArgs(args);
         loadDataFromStorage();
+        john = new HashMap<PersonProperty, String>();
         while (true) {
             String userCommand = getUserInput();
             echoUserCommand(userCommand);
@@ -779,11 +783,14 @@ public class AddressBook {
 
     /**
      * Adds a person to the address book. Saves changes to storage file.
-     *
+     * Use a new Hashmap instead of a String array
      * @param person to add
      */
     private static void addPersonToAddressBook(String[] person) {
         ALL_PERSONS.add(person);
+        john.put(PersonProperty.NAME, person[0]);
+        john.put(PersonProperty.EMAIL, person[1]);
+        john.put(PersonProperty.PHONE, person[2]);
         savePersonsToFile(getAllPersonsInAddressBook(), storageFilePath);
     }
 
